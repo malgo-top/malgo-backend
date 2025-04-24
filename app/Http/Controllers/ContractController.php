@@ -61,16 +61,23 @@ class ContractController extends Controller
 
         // Create a new user for the principal financial responsible
         $password = Str::random(8);
-        $user = User::create([
-            'name' => $principal->full_name,
-            'email' => $principal->email,
-            'phone_number' => $principal->phone_number,
-            'tenant_application_id' => $tenantApplication->id,
-            'password' => bcrypt($password),
-        ]);
 
-        $user->assignRole('tenant');
+        $user = User::where('tenant_application_id', $tenantApplication->id)->first();
 
+        if(!$user){
+
+            $user = User::create([
+                'name' => $principal->full_name,
+                'email' => $principal->email,
+                'phone_number' => $principal->phone_number,
+                'tenant_application_id' => $tenantApplication->id,
+                'password' => bcrypt($password),
+            ]);
+
+            $user->assignRole('tenant');
+
+        }
+        
         // Send congratulatory email with credentials
         Mail::to($principal->email)->send(new ContractSignedMail($principal->full_name, $principal->email, $password));
 

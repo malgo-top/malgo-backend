@@ -16,7 +16,7 @@
                 <li class="nav-item">
                     <button @click="logout" class="nav-link" style="background: none; border: none; cursor: pointer;">
                         <i class="fas fa-sign-out-alt"></i>
-                        <span style="margin-right: 15px;">Log Out</span>
+                        <span style="margin-right: 15px;">Salir</span>
                     </button>
                 </li>
             </ul>
@@ -48,7 +48,7 @@
                 <li class="nav-item">
                     <button @click="logout" class="nav-link" style="background: none; border: none; cursor: pointer;">
                         <i class="fas fa-sign-out-alt" style="width: 22px !important;"></i>
-                        <span>Log Out</span>
+                        <span>Salir</span>
                     </button>
                 </li>
             </ul>
