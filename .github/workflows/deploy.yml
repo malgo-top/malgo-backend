@@ -55,7 +55,7 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws_region: us-east-2
+        region: us-east-2
         application_name: ${{ secrets.AWS_EB_APPLICATION_NAME }}
         environment_name: ${{ secrets.AWS_EB_ENVIRONMENT_NAME }}
         version_label: ${{ github.sha }}-${{ github.run_number }} # Unique version label
