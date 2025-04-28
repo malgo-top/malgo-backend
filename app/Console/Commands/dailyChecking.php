@@ -77,11 +77,11 @@ class dailyChecking extends Command
 
     protected function deleteS3FileByUrl($url)
     {
-        $parsed = parse_url($url);
-        $path = ltrim($parsed['path'], '/');
+        // $parsed = parse_url($url);
+        // $path = ltrim($parsed['path'], '/');
 
-        if (Storage::disk('s3')->exists($path)) {
-            Storage::disk('s3')->delete($path);
+        if (Storage::disk('s3')->exists($url)) {
+            Storage::disk('s3')->delete($url);
         }
     }
 

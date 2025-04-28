@@ -15,7 +15,7 @@ class Bill extends Model
     ];
 
     protected $encryptable = [
-        'start_date', 'end_date', 'due_date', 'amount'
+        'start_date', 'end_date', 'amount'
     ];
 
     public function billType() {
