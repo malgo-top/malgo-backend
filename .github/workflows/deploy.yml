@@ -41,7 +41,9 @@ jobs:
 
     - name: Generate Deployment Package
       # Zip all files, including vendor and .ebextensions, excluding .git, .env, node_modules etc.
-      run: zip -r ../deploy.zip . -x ".git/*" ".github/*" ".env" ".env.example" "storage/logs/*" "storage/framework/sessions/*" "storage/framework/cache/*" "storage/framework/views/*" "tests/*" "node_modules/*" "docker-compose.yml" "README.md" ".editorconfig" ".styleci.yml" ".gitattributes"
+      # run: zip -r ../deploy.zip . -x ".git/*" ".github/*" ".env" ".env.example" "storage/logs/*" "storage/framework/sessions/*" "storage/framework/cache/*" "storage/framework/views/*" "tests/*" "node_modules/*" "docker-compose.yml" "README.md" ".editorconfig" ".styleci.yml" ".gitattributes"
+      run: zip -r ../deploy.zip . -x ".git/*" ".github/*" ".env" ".env.example" "storage/framework/sessions/*" "storage/framework/cache/*" "storage/framework/views/*" "tests/*" "node_modules/*" "docker-compose.yml" "README.md" ".editorconfig" ".styleci.yml" ".gitattributes"
+
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4 # Use latest version
