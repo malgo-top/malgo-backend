@@ -54,11 +54,32 @@ return [
     */
 
     'channels' => [
+        // 'stack' => [
+        //     'driver' => 'stack',
+        //     'channels' => ['single'],
+        //     'ignore_exceptions' => false,
+        // ],
+
+        // config/logging.php
+
+        'stderr' => [
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'debug'),
+            'handler' => Monolog\Handler\StreamHandler::class, // Make sure namespace is correct or imported
+            'formatter' => env('LOG_STDERR_FORMATTER'),
+            'with' => [
+                'stream' => 'php://stderr',
+            ],
+        ],
+
+        // Configure the 'stack' channel
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['stderr'], // Start with stderr
+            // You can easily add other channels here later e.g., ['stderr', 'slack', 'daily']
             'ignore_exceptions' => false,
         ],
+
 
         'single' => [
             'driver' => 'single',
@@ -96,16 +117,16 @@ return [
             'processors' => [PsrLogMessageProcessor::class],
         ],
 
-        'stderr' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
-            'with' => [
-                'stream' => 'php://stderr',
-            ],
-            'processors' => [PsrLogMessageProcessor::class],
-        ],
+        // 'stderr' => [
+        //     'driver' => 'monolog',
+        //     'level' => env('LOG_LEVEL', 'debug'),
+        //     'handler' => StreamHandler::class,
+        //     'formatter' => env('LOG_STDERR_FORMATTER'),
+        //     'with' => [
+        //         'stream' => 'php://stderr',
+        //     ],
+        //     'processors' => [PsrLogMessageProcessor::class],
+        // ],
 
         'syslog' => [
             'driver' => 'syslog',
