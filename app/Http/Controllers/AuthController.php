@@ -35,7 +35,7 @@ class AuthController extends Controller
 
         // Role::firstOrCreate(['name' => 'tenant']);
 
-        $user->assignRole('admin');
+        // $user->assignRole('admin');
 
         // $token = $user->createToken('api-token')->plainTextToken;
 
