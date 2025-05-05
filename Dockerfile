@@ -32,7 +32,6 @@ RUN chown -R www-data:www-data \
     /var/www/bootstrap/cache
 
 # Expose port for Railway
-# Expose port for Railway
 EXPOSE 8000
 
 # 🚀 Start server (not using php artisan serve!)
