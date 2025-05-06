@@ -27,7 +27,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get("/contract/all", [ContractController::class, 'getContracts']);
     Route::put("/contract/terminate", [ContractController::class, 'terminateContract']);
     Route::post('register', [AuthController::class, 'register']);
-
+    
 
     Route::post("/bill/create/agua", [BillController::class, 'createWaterBill']);
     Route::post("/bill/create/gas", [BillController::class, 'createGasBill']);
@@ -44,6 +44,7 @@ Route::middleware(['auth:sanctum', 'role:tenant|admin'])->group(function () {
     Route::post("/bill/pay/", [BillController::class, 'payBills']);
 
     Route::get("/payment/all/", [PaymentController::class, 'getPayments']);
+    //hola
     Route::put("/payment/verify/", [PaymentController::class, 'verifyPayment']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
