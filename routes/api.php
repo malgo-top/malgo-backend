@@ -15,6 +15,8 @@ Route::get("/property/check/application/open", [PropertyController::class, 'chec
 
 //delete when production
 Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
+
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
@@ -26,8 +28,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post("/contract/create", [ContractController::class, 'createContract']);
     Route::get("/contract/all", [ContractController::class, 'getContracts']);
     Route::put("/contract/terminate", [ContractController::class, 'terminateContract']);
-    Route::post('register', [AuthController::class, 'register']);
-    
 
     Route::post("/bill/create/agua", [BillController::class, 'createWaterBill']);
     Route::post("/bill/create/gas", [BillController::class, 'createGasBill']);
