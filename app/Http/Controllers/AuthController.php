@@ -24,8 +24,8 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        $admin = Role::create(['name' => 'admin']);
-        $admin = Role::create(['name' => 'tenant']);
+        // $admin = Role::create(['name' => 'admin']);
+        // $admin = Role::create(['name' => 'tenant']);
        //$user->assignRole('admin');
 
         $user = User::create([
@@ -36,7 +36,7 @@ class AuthController extends Controller
 
         // Role::firstOrCreate(['name' => 'tenant']);
 
-        $user->assignRole('admin');
+        // $user->assignRole('admin');
 
         // $token = $user->createToken('api-token')->plainTextToken;
 

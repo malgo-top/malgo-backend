@@ -15,6 +15,7 @@ return new class extends Migration
             $table->foreignId('property_id')->constrained('properties');
             $table->date('move_in_date');
             $table->string('status')->default('pending'); // Pending/Approved/Rejected
+            $table->string('comment'); // Pending/Approved/Rejected
             $table->timestamps();
         });
     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TenantApplication extends Model
 {
-    protected $fillable = ['property_id', 'move_in_date', 'status'];
+    protected $fillable = ['property_id', 'move_in_date', 'status', 'comment'];
 
     // Relationships
     public function financialResponsibles() {

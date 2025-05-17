@@ -12,9 +12,13 @@ use App\Models\Cohabitant;
 use App\Models\Pet;
 use App\Models\ParkingNeed;
 use App\Models\Property;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TenantApplicationDenied;
 use App\Mail\TenantApplicationAccepted;
+use App\Mail\NewApplication;
+use App\Mail\DocumentAsk;
+use App\Mail\NewDocument;
 
 class TenantApplicationController extends Controller
 {
@@ -22,6 +26,7 @@ class TenantApplicationController extends Controller
     public function createTenantApplication(Request $request)
     {
 
+           try {
         $property = Property::whereEncrypted('sku', $request->property_id)->firstOrFail();
 
         // 1. Create the main tenant application
@@ -45,6 +50,7 @@ class TenantApplicationController extends Controller
                 'nationality' => $responsibleData['nationality'],
                 'employment_status' => $responsibleData['employment_status'],
                 'monthly_salary' => $responsibleData['monthly_salary'],
+                'business_description' => $responsibleData['business_description'] ? $responsibleData['business_description'] : "No aplica",
                 'start_current_job_date' => $responsibleData['start_current_job_date'],
                 'guarantor_full_name' => $responsibleData['guarantor_full_name'],
                 'guarantor_document_type' => $responsibleData['guarantor_document_type'],
@@ -60,6 +66,7 @@ class TenantApplicationController extends Controller
                 'document_pay_1',
                 'document_pay_2',
                 'document_pay_3',
+                'document_other',
                 'guarantor_property_cert'
             ];
 
@@ -116,6 +123,7 @@ class TenantApplicationController extends Controller
                     'tenant_application_id' => $application->id,
                     'type' => $petData['type'],
                     'sex' => $petData['sex'],
+                    'size' => $petData['size'],
                 ]);
             }
         }
@@ -130,9 +138,17 @@ class TenantApplicationController extends Controller
             }
         }
 
+        $emailAdmin = User::findOrFail(1); 
+        Mail::to($emailAdmin->email)->send(new NewApplication($request->property_id));
+
         return response()->json([
             'success' => true
         ]);
+
+           } catch (\Exception $e) {
+            return $e;
+        }
+
     }
 
     public function getTenantApplications(){
@@ -178,6 +194,8 @@ class TenantApplicationController extends Controller
                 'document_pay_1',
                 'document_pay_2',
                 'document_pay_3',
+                'document_other',
+                'document_asked',
                 'guarantor_property_cert'
             ];
 
@@ -282,6 +300,66 @@ class TenantApplicationController extends Controller
         ])->get();
 
         return response()->json(["success" => true, "data" => $application]);
+
+    }
+
+    public function updateComment(Request $request){
+        
+        $ta = TenantApplication::findOrFail($request->id);
+        $ta->comment = $request->comment;
+        $ta->save();
+
+        return response()->json(["success" => true]);
+
+    }
+
+    // public function requestOtherDoc(Request $request)
+    // {
+    //     $ta = TenantApplication::findOrFail($request->id);
+    
+    //     $code = $ta->id * 3141; 
+    //     $tenApId = $request->tenApId;
+
+    //     $link = "https://www.malgo.top/#/document/asked?tenApId=" . urlencode($tenApId) . "&code=" . urlencode($code);
+
+    //     Mail::to($request->email)->send(new DocumentAsk($request->name, $link, $request->message));
+
+    //     return response()->json(["success" => true]);
+    // }
+
+    
+    public function requestOtherDoc(Request $request)
+    {
+        $code = $request->id * 3141; 
+        $tenApId = $request->id;
+
+        $link = "https://www.malgo.top/#/document/asked?tenApId=" . urlencode($tenApId) . "&code=" . urlencode($code);
+
+        Mail::to($request->email)->send(new DocumentAsk($request->name, $link, $request->message));
+
+        return response()->json(["success" => true]);
+    }
+
+    public function uploadOtherDoc(Request $request){
+
+        $fr = FinancialResponsible::where("tenant_application_id",$request->input('tenApId'))->where("principal", 1)->first();
+
+        if($fr->document_asked){
+            return response()->json(["success" => false]);
+        }
+
+        $path = $request->file('document_asked')->store('tenant_files', 's3');
+
+        $fr->document_asked = $path;
+        $fr->save();
+
+        try {
+            $emailAdmin = User::findOrFail(1); 
+            Mail::to($emailAdmin->email)->send(new NewDocument($request->input('tenApId')));
+        } catch (\Exception $e) {
+        }
+
+        return response()->json(["success" => true]);
 
     }
 

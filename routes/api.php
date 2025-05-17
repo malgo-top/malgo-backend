@@ -12,10 +12,11 @@ use Illuminate\Http\Request;
 
 Route::post('/create/tenant/application', [TenantApplicationController::class, 'createTenantApplication']);
 Route::get("/property/check/application/open", [PropertyController::class, 'checkIfPropertyApplicationOpen']);
+Route::post('/tenant/application/request/doc/upload', [TenantApplicationController::class, 'uploadOtherDoc']);
 
 //delete when production
 Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
+// Route::post('register', [AuthController::class, 'register']);
 
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
@@ -24,6 +25,10 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/tenant/application/deny', [TenantApplicationController::class, 'denyTenantApplication']);
     Route::put('/tenant/application/accept', [TenantApplicationController::class, 'acceptTenantApplication']);
     Route::put('/tenant/application/save', [TenantApplicationController::class, 'saveTenantApplication']);
+
+    Route::put('/tenant/application/comment', [TenantApplicationController::class, 'updateComment']);
+
+    Route::put('/tenant/application/request/doc', [TenantApplicationController::class, 'requestOtherDoc']);
 
     Route::post("/contract/create", [ContractController::class, 'createContract']);
     Route::get("/contract/all", [ContractController::class, 'getContracts']);

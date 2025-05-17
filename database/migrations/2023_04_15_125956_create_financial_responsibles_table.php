@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('document_pay_1'); // Desprendible/Extracto 1
             $table->string('document_pay_2'); // Desprendible/Extracto 2
             $table->string('document_pay_3'); // Desprendible/Extracto 3
+            $table->string('document_other'); // Desprendible/Extracto 2
+            $table->string('document_asked'); // Desprendible/Extracto 3
             $table->string('employment_status'); // Employed/Independent
             $table->string('monthly_salary');
             $table->date('start_current_job_date');

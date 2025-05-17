@@ -17,6 +17,7 @@ class FinancialResponsible extends Model
         'tenant_application_id', 'full_name', 'document_type', 'document_number',
         "document_id", 'phone_number', 'email', 'document_type',"principal",
         'document_certf', 'document_pay_1', 'document_pay_2', 'document_pay_3',
+        'document_other', 'document_asked','business_description',
         'employment_status', 'monthly_salary', 'birthdate', 'nationality',
         'start_current_job_date', 'guarantor_full_name', 'guarantor_document_type',
         'guarantor_document_number', 'guarantor_property_cert'
@@ -26,6 +27,7 @@ class FinancialResponsible extends Model
         'full_name', 'document_type', 'document_number',
         "document_id", 'phone_number', 'email', 'document_type',
         'document_certf', 'document_pay_1', 'document_pay_2', 'document_pay_3',
+        'document_other', 'document_asked','business_description',
         'employment_status', 'nationality','monthly_salary', 
          'guarantor_full_name', 'guarantor_document_type',
         'guarantor_document_number', 'guarantor_property_cert'
@@ -46,6 +48,8 @@ class FinancialResponsible extends Model
         'document_pay_1_url',
         'document_pay_2_url',
         'document_pay_3_url',
+        'document_other_url',
+        'document_asked_url',
         'guarantor_property_cert_url',
     ];
 
@@ -79,6 +83,16 @@ class FinancialResponsible extends Model
     public function getGuarantorPropertyCertUrlAttribute()
     {
         return $this->generateTemporaryUrl($this->guarantor_property_cert);
+    }
+
+    public function getDocumentOtherUrlAttribute()
+    {
+        return $this->generateTemporaryUrl($this->document_other);
+    }
+
+    public function getDocumentAskedUrlAttribute()
+    {
+        return $this->generateTemporaryUrl($this->document_asked);
     }
 
     // Shared helper method
