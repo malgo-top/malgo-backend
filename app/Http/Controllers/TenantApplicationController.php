@@ -26,7 +26,6 @@ class TenantApplicationController extends Controller
     public function createTenantApplication(Request $request)
     {
 
-           try {
         $property = Property::whereEncrypted('sku', $request->property_id)->firstOrFail();
 
         // 1. Create the main tenant application
@@ -144,10 +143,6 @@ class TenantApplicationController extends Controller
         return response()->json([
             'success' => true
         ]);
-
-           } catch (\Exception $e) {
-            return $e;
-        }
 
     }
 
