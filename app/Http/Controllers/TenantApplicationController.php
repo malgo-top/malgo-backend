@@ -359,4 +359,71 @@ class TenantApplicationController extends Controller
     }
 
 
+    public function deleteTenantApplication(Request $request)
+    {
+        $request->validate([
+            'tenantID' => 'required|exists:tenant_applications,id',
+        ]);
+
+        $tenantApplication = TenantApplication::with([
+            'financialResponsibles.additionalIncomes',
+            'cohabitants',
+            'pets',
+            'parkingNeeds'
+        ])->findOrFail($request->tenantID);
+
+        // 1. Email the principal financial responsible
+        $principal = $tenantApplication->financialResponsibles->where('principal', 1)->first();
+
+        // 2. Delete files from AWS S3
+        foreach ($tenantApplication->financialResponsibles as $responsible) {
+            // Delete document files from responsible
+            $fileFields = [
+                'document_id',
+                'document_certf',
+                'document_pay_1',
+                'document_pay_2',
+                'document_pay_3',
+                'document_other',
+                'document_asked',
+                'guarantor_property_cert'
+            ];
+
+            foreach ($fileFields as $field) {
+                if (!empty($responsible->$field)) {
+                    $this->deleteS3FileByUrl($responsible->$field);
+                }
+            }
+
+            // Delete AdditionalIncome cert files
+            foreach ($responsible->additionalIncomes as $income) {
+                if (!empty($income->income_cert)) {
+                    $this->deleteS3FileByUrl($income->income_cert);
+                }
+                $income->delete(); // Delete record
+            }
+
+            $responsible->delete(); // Delete financial responsible
+        }
+
+        // 3. Delete related records
+        $tenantApplication->cohabitants()->delete();
+        $tenantApplication->pets()->delete();
+        $tenantApplication->parkingNeeds()->delete();
+
+        // 4. Delete the tenant application
+        $tenantApplication->delete();
+
+        $application = TenantApplication::with([
+            'property:id,sku',
+            'financialResponsibles.additionalIncomes',
+            'cohabitants',
+            'pets',
+            'parkingNeeds'
+        ])->get();
+
+        return response()->json(["success" => true, "data" => $application]);
+    }
+
+
 }

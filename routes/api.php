@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/tenant/application/deny', [TenantApplicationController::class, 'denyTenantApplication']);
     Route::put('/tenant/application/accept', [TenantApplicationController::class, 'acceptTenantApplication']);
     Route::put('/tenant/application/save', [TenantApplicationController::class, 'saveTenantApplication']);
+    Route::put('/tenant/application/delete', [TenantApplicationController::class, 'deleteTenantApplication']);
 
     Route::put('/tenant/application/comment', [TenantApplicationController::class, 'updateComment']);
 
